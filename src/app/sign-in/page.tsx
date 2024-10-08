@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { CldImage } from "next-cloudinary";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { FaGithub } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa6";
@@ -67,11 +67,9 @@ export default function SignIn() {
                 <h1 className="font-bold text-3xl">Welcome Back</h1>
                 <p className="text-muted-foreground text-sm">
                   {"Don't"} have an account?{" "}
-                  <Link href={"/sign-up"}>
-                    <Button variant={"link"} className="p-0" type="button">
-                      Create an account.
-                    </Button>
-                  </Link>
+                  <Link href={"/sign-up"}
+                    rel="noreferrer" className={`px-0 py-0 ${buttonVariants({ variant: "link" })}`}
+                  >Create an account.</Link>
                   {" "}It takes less than a minute.
                 </p>
               </div>
