@@ -71,7 +71,7 @@ export default function SignUp() {
                 <p className="text-muted-foreground text-sm">
                   Welcome to ProMister - {"Let's"} create your account! Or{" "}
                   <Link href={"/sign-in"}
-                    rel="noreferrer" className={`px-0 py-0 ${buttonVariants({ variant: "link" })}`}
+                    rel="noreferrer" className={`px-1 ${buttonVariants({ variant: "link" })}`}
                   >Sign in.</Link>
                 </p>
               </div>
@@ -138,7 +138,7 @@ export default function SignUp() {
                 variant={"secondary"}
                 className="w-full rounded-xl"
               >
-                Submit
+                Sign Up
               </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
