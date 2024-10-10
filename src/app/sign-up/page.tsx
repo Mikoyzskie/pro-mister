@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useEffect } from "react";
+import { useFormState, useFormStatus } from "react-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,8 +12,8 @@ import { toast } from "@/hooks/use-toast";
 import { FaGithub } from "react-icons/fa";
 import { FaDoorOpen } from "react-icons/fa6";
 import Link from "next/link";
+import Loader from "@/components/loader";
 
-// import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
@@ -23,6 +25,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { signUp } from "./action"
+
 const FormSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
@@ -33,7 +37,39 @@ const FormSchema = z.object({
   }),
 });
 
+type InitialState = {
+  message: string;
+}
+
+const initialState: InitialState = {
+  message: ""
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      variant={"secondary"}
+      className="w-full rounded-xl"
+      disabled={pending}
+    >
+      {pending ?
+        <>
+          <Loader /> &nbsp;
+          Signing Up...
+        </>
+        : "Sign Up"
+      }
+
+    </Button>
+  )
+}
+
 export default function SignUp() {
+  const [signUpState, signUpFormAction] = useFormState(signUp, initialState);
+  const formRef = useRef<HTMLFormElement>(null);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,16 +79,19 @@ export default function SignUp() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
+
+  useEffect(() => {
+    if (signUpState && signUpState.message) {
+      toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{signUpState.message}</code>
+          </pre>
+        ),
+      });
+    }
+  }, [signUpState])
 
   return (
     <div className="flex h-screen w-full p-4">
@@ -60,7 +99,8 @@ export default function SignUp() {
         <div className="h-full w-full flex justify-center items-center">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              ref={formRef}
+              action={signUpFormAction}
               className="w-2/3 space-y-3 max-w-[350px]"
             >
               <div>
@@ -75,7 +115,7 @@ export default function SignUp() {
                   >Sign in.</Link>
                 </p>
               </div>
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -93,7 +133,7 @@ export default function SignUp() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 control={form.control}
                 name="email"
@@ -133,13 +173,7 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <Button
-                type="submit"
-                variant={"secondary"}
-                className="w-full rounded-xl"
-              >
-                Sign Up
-              </Button>
+              <SubmitButton />
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />

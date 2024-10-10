@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 
 import { CldImage } from "next-cloudinary";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -24,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Loader from "@/components/loader";
 
-import { signIn } from "./action"
+import { login } from './actions'
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -63,8 +64,8 @@ function SubmitButton() {
 }
 
 export default function SignIn() {
-  const [signInState, signInFormAction] = useFormState(signIn, initialState);
-
+  const [signInState, signInFormAction] = useFormState(login, initialState);
+  // const [isValid, setIsValid] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -88,16 +89,24 @@ export default function SignIn() {
     }
   }, [signInState])
 
-  // function onSubmit(data: z.infer<typeof FormSchema>) {
-  //   toast({
-  //     title: "You submitted the following values:",
-  //     description: (
-  //       <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-  //         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-  //       </pre>
-  //     ),
-  //   });
-  // }
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+    });
+
+    const formData = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key]);
+    });
+
+    signInFormAction(form_data)
+  }
 
   return (
     <div className="flex h-screen w-full p-4">
@@ -106,7 +115,7 @@ export default function SignIn() {
           <Form {...form}>
             <form
               ref={formRef}
-              action={signInFormAction}
+              onSubmit={form.handleSubmit(onSubmit)}
               className="w-2/3 space-y-3 max-w-[350px]"
             >
               <div>
@@ -132,7 +141,7 @@ export default function SignIn() {
                       <Input
                         placeholder="johndoe69@company.com"
                         {...field}
-                        className="rounded-xl"
+                        className="rounded-xl ring-red-500 ring-1"
                       />
                     </FormControl>
                     <FormDescription>
