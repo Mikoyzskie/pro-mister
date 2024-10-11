@@ -28,6 +28,9 @@ import { Input } from "@/components/ui/input";
 import { signup } from "./actions";
 
 const FormSchema = z.object({
+  name: z.string().min(2, {
+    message: "Full name must be at least 2 characters"
+  }),
   email: z.string().email(),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
@@ -50,6 +53,7 @@ export default function SignUp() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -99,7 +103,7 @@ export default function SignUp() {
                   </Link>
                 </p>
               </div>
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -117,7 +121,7 @@ export default function SignUp() {
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
               <FormField
                 control={form.control}
                 name="email"

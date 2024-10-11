@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 
 type UserInputType = {
+  name: string;
   email: string;
   password: string;
 };
