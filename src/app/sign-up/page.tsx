@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useRef, useEffect, useState } from "react";
+import { useFormState } from "react-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,12 +25,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { signUp } from "./action";
+import { signup } from "./actions";
 
 const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
   email: z.string().email(),
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
@@ -45,43 +42,23 @@ const initialState: InitialState = {
   message: "",
 };
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button
-      type="submit"
-      variant={"secondary"}
-      className="w-full rounded-xl"
-      disabled={pending}
-    >
-      {pending ? (
-        <>
-          <Loader /> &nbsp; Signing Up...
-        </>
-      ) : (
-        "Sign Up"
-      )}
-    </Button>
-  );
-}
-
 export default function SignUp() {
-  const [signUpState, signUpFormAction] = useFormState(signUp, initialState);
+  const [signUpState, signUpFormAction] = useFormState(signup, initialState);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
     },
   });
 
   useEffect(() => {
-    if (signUpState && signUpState.message) {
+    if (signUpState.message) {
       toast({
-        title: "You submitted the following values:",
+        title: "",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{signUpState.message}</code>
@@ -91,6 +68,11 @@ export default function SignUp() {
     }
   }, [signUpState]);
 
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    setIsLoading(true);
+    signUpFormAction(data);
+  }
+
   return (
     <div className="flex h-screen w-full p-4">
       <div className="basis-1/2">
@@ -98,7 +80,7 @@ export default function SignUp() {
           <Form {...form}>
             <form
               ref={formRef}
-              action={signUpFormAction}
+              onSubmit={form.handleSubmit(onSubmit)}
               className="w-2/3 space-y-3 max-w-[350px]"
             >
               <div>
@@ -173,7 +155,20 @@ export default function SignUp() {
                   </FormItem>
                 )}
               />
-              <SubmitButton />
+              <Button
+                type="submit"
+                variant={"secondary"}
+                className="w-full rounded-xl"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader /> &nbsp; Signing Up...
+                  </>
+                ) : (
+                  "Sign Up"
+                )}
+              </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
