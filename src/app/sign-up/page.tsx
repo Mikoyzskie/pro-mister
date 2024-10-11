@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { signUp } from "./action"
+import { signUp } from "./action";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -39,11 +39,11 @@ const FormSchema = z.object({
 
 type InitialState = {
   message: string;
-}
+};
 
 const initialState: InitialState = {
-  message: ""
-}
+  message: "",
+};
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -54,16 +54,15 @@ function SubmitButton() {
       className="w-full rounded-xl"
       disabled={pending}
     >
-      {pending ?
+      {pending ? (
         <>
-          <Loader /> &nbsp;
-          Signing Up...
+          <Loader /> &nbsp; Signing Up...
         </>
-        : "Sign Up"
-      }
-
+      ) : (
+        "Sign Up"
+      )}
     </Button>
-  )
+  );
 }
 
 export default function SignUp() {
@@ -79,7 +78,6 @@ export default function SignUp() {
     },
   });
 
-
   useEffect(() => {
     if (signUpState && signUpState.message) {
       toast({
@@ -91,7 +89,7 @@ export default function SignUp() {
         ),
       });
     }
-  }, [signUpState])
+  }, [signUpState]);
 
   return (
     <div className="flex h-screen w-full p-4">
@@ -110,9 +108,13 @@ export default function SignUp() {
                 <h1 className="font-bold text-3xl">Get Started</h1>
                 <p className="text-muted-foreground text-sm">
                   Welcome to ProMister - {"Let's"} create your account! Or{" "}
-                  <Link href={"/sign-in"}
-                    rel="noreferrer" className={`px-1 ${buttonVariants({ variant: "link" })}`}
-                  >Sign in.</Link>
+                  <Link
+                    href={"/sign-in"}
+                    rel="noreferrer"
+                    className={`px-1 ${buttonVariants({ variant: "link" })}`}
+                  >
+                    Sign in.
+                  </Link>
                 </p>
               </div>
               {/* <FormField
@@ -147,8 +149,7 @@ export default function SignUp() {
                         className="rounded-xl"
                       />
                     </FormControl>
-                    <FormDescription>
-                    </FormDescription>
+                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -167,8 +168,7 @@ export default function SignUp() {
                         type="password"
                       />
                     </FormControl>
-                    <FormDescription>
-                    </FormDescription>
+                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

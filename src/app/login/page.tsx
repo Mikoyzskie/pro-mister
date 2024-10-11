@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useRef, useEffect, useState } from "react";
+import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 
 import { CldImage } from "next-cloudinary";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -25,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Loader from "@/components/loader";
 
-import { login } from './actions'
+import { login } from "./actions";
 
 const FormSchema = z.object({
   email: z.string().email(),
@@ -36,36 +35,15 @@ const FormSchema = z.object({
 
 type InitialState = {
   message: string;
-}
+};
 
 const initialState: InitialState = {
-  message: ""
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button
-      type="submit"
-      variant={"secondary"}
-      className="w-full rounded-xl"
-      disabled={pending}
-    >
-      {pending ?
-        <>
-          <Loader /> &nbsp;
-          Signing In...
-        </>
-        : "Sign In"
-      }
-
-    </Button>
-  )
-}
+  message: "",
+};
 
 export default function SignIn() {
   const [signInState, signInFormAction] = useFormState(login, initialState);
-  // const [isValid, setIsValid] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -78,8 +56,9 @@ export default function SignIn() {
 
   useEffect(() => {
     if (signInState.message) {
+      setIsLoading(false);
       toast({
-        title: "You submitted the following values:",
+        title: "Server:",
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{signInState.message}</code>
@@ -87,25 +66,11 @@ export default function SignIn() {
         ),
       });
     }
-  }, [signInState])
+  }, [signInState]);
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-
-    const formData = new FormData();
-
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
-    });
-
-    signInFormAction(form_data)
+    setIsLoading(true);
+    signInFormAction(data);
   }
 
   return (
@@ -125,9 +90,13 @@ export default function SignIn() {
                 <h1 className="font-bold text-3xl">Welcome Back</h1>
                 <p className="text-muted-foreground text-sm">
                   Don&apos;t have an account?
-                  <Link href={"/sign-up"}
-                    rel="noreferrer" className={`${buttonVariants({ variant: "link" })} px-1`}
-                  >Create an account.</Link>
+                  <Link
+                    href={"/sign-up"}
+                    rel="noreferrer"
+                    className={`${buttonVariants({ variant: "link" })} px-1`}
+                  >
+                    Create an account.
+                  </Link>
                   It takes less than a minute.
                 </p>
               </div>
@@ -141,11 +110,10 @@ export default function SignIn() {
                       <Input
                         placeholder="johndoe69@company.com"
                         {...field}
-                        className="rounded-xl ring-red-500 ring-1"
+                        className="rounded-xl"
                       />
                     </FormControl>
-                    <FormDescription>
-                    </FormDescription>
+                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -164,13 +132,25 @@ export default function SignIn() {
                         type="password"
                       />
                     </FormControl>
-                    <FormDescription>
-                    </FormDescription>
+                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <SubmitButton />
+              <Button
+                type="submit"
+                variant={"secondary"}
+                className="w-full rounded-xl"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader /> &nbsp; Signing In...
+                  </>
+                ) : (
+                  "Sign In"
+                )}
+              </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t" />
