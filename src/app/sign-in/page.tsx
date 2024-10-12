@@ -176,7 +176,7 @@ export default function SignIn() {
         <div className="h-full">
           <div className="flex h-full rounded-3xl overflow-hidden">
             <CldImage
-              src="13_Horizon_Homes_-_10022.BLK_Epic_Privacy_Set_Matt_Black_l7oaql.jpg"
+              src="MattBlack"
               width="1000"
               height="1000"
               alt={"Login Hero"}
