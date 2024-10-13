@@ -1,6 +1,7 @@
 import * as React from "react"
 // import { MinusIcon, PlusIcon } from "@radix-ui/react-icons"
 // import { Bar, BarChart, ResponsiveContainer } from "recharts"
+import { UserPlus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -66,7 +67,14 @@ export default function DrawerDemo() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline">Open Drawer</Button>
+        <Button
+          variant="default"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
+          <UserPlus className="mr-2 h-4 w-4" />
+          Add Customer
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
