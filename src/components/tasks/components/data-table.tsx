@@ -24,6 +24,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+// import { ScrollArea } from "@/components/ui/scroll-area"
+
 
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
@@ -118,6 +120,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
+
         </Table>
       </div>
       <DataTablePagination table={table} />

@@ -6,11 +6,13 @@ export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       <SideNav>
-        <div className="flex flex-col">
-          <header className="w-full p-5 flex justify-end">
-            <UserNav />
-          </header>
-          <Separator />
+        <div className="">
+          <div>
+            <header className="w-full p-5 flex justify-end">
+              <UserNav />
+            </header>
+            <Separator />
+          </div>
           {children}
         </div>
       </SideNav>

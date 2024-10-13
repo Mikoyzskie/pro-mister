@@ -79,7 +79,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
           }}
           className={cn(
             isCollapsed &&
-            "min-w-[50px] transition-all duration-300 ease-in-out",
+            "min-w-[50px] transition-all duration-300 ease-in-out", "max-h-screen"
           )}
         >
           <div className="flex flex-col w-full h-full">
@@ -176,7 +176,9 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={85} minSize={85}>
-          {children}
+          <div className="">
+            {children}
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>
