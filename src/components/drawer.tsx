@@ -43,17 +43,22 @@ export default function DrawerDemo() {
             </DrawerClose>
           </DrawerHeader>
           <div className="p-4 pb-0 flex flex-col gap-3">
-            <Input size={50} placeholder="Acme Imc." />
             <div className="flex gap-3">
-              <Input placeholder="John Does" />
+              <Input placeholder="Acme Imc." />
+              <Input placeholder="Builder" />
+            </div>
+            <Input placeholder="John Does" />
+            <Input placeholder="Senior Architect" />
+            <div className="flex gap-3">
+              <Input placeholder="johndoe69@email.com" />
               <Input placeholder="+639279298514" />
             </div>
-            <Input placeholder="johndoe69@email.com" />
-            <Input placeholder="114 Micheal St Corner Kenway" />
+            <Input placeholder="114 Micheal St Corner Kenway, Maryland City" />
+
             <div className="flex gap-3">
-              <Input placeholder="Maryland City" size={10} />
               <Input placeholder="Queensland" size={10} />
               <Input placeholder="Australia" size={10} />
+              <Input placeholder="2010" size={10} />
             </div>
 
           </div>
