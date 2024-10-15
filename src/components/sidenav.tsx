@@ -1,5 +1,6 @@
 "use client";
 
+import { CldImage } from "next-cloudinary";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils"
 import {
@@ -29,6 +30,7 @@ import { Nav } from "@/components/nav";
 export default function SideNav({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<string>("Dashboard");
 
   const supabase = createClient();
 
@@ -45,7 +47,12 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
 
     getCurrentUser();
 
-  }, [supabase.auth])
+  }, [supabase.auth]);
+
+
+  useEffect(() => {
+    console.log(currentPage);
+  }, [currentPage])
 
 
   return (
@@ -95,83 +102,64 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
 
             <Nav
               isCollapsed={isCollapsed}
+              setCurrentPage={setCurrentPage}
               links={[
                 {
                   title: "Dashboard",
                   label: "",
                   icon: LayoutDashboard,
-                  variant: "default",
+                  variant: currentPage === "Dashboard" ? "default" : "ghost",
                 },
                 {
                   title: "Projects",
                   label: "128",
                   icon: FolderKanban,
-                  variant: "ghost",
+                  variant: currentPage === "Projects" ? "default" : "ghost",
                 },
                 {
                   title: "Doors",
                   label: "9",
                   icon: DoorOpen,
-                  variant: "ghost",
+                  variant: currentPage === "Doors" ? "default" : "ghost",
                 },
                 {
                   title: "Products",
                   label: "23",
                   icon: Package,
-                  variant: "ghost",
+                  variant: currentPage === "Products" ? "default" : "ghost",
                 },
                 {
                   title: "Customers",
                   label: "",
                   icon: ContactRound,
-                  variant: "ghost",
+                  variant: currentPage === "Customers" ? "default" : "ghost",
                 },
                 {
                   title: "Consultants",
                   label: "",
                   icon: Users,
-                  variant: "ghost",
+                  variant: currentPage === "Consultants" ? "default" : "ghost",
                 },
                 {
                   title: "Templates",
                   label: "",
                   icon: FileText,
-                  variant: "ghost",
+                  variant: currentPage === "Templates" ? "default" : "ghost",
                 },
               ]}
             />
             <div className="mt-auto p-4">
-              <div className={cn("bg-muted h-52", isCollapsed && "hidden")} />
-              {/* <Nav
-                isCollapsed={isCollapsed}
-                links={[
-                  {
-                    title: "Settings",
+              <div className={cn("bg-muted h-52 relative overflow-hidden rounded-xl", isCollapsed && "hidden")}>
+                <CldImage
+                  src="geometry_jmx9dh"
+                  width="1000"
+                  height="1000"
+                  alt={"Geometry footer"}
+                  className="w-full h-full object-cover rounded-xl blur-sm"
+                />
 
-                    icon: Settings,
-                    variant: "ghost",
-                  },
-                  {
-                    title: "AI Chat",
+              </div>
 
-                    icon: BrainCircuit,
-                    variant: "ghost",
-                  },
-                  {
-                    title: "Account",
-
-                    icon: CircleUserRound,
-                    variant: "ghost",
-                  },
-                  {
-                    title: "Sign Out",
-
-                    icon: LogOut,
-                    variant: "default",
-                  },
-
-                ]}
-              /> */}
             </div>
           </div>
         </ResizablePanel>

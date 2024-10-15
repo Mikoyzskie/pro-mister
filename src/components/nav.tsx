@@ -10,9 +10,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Dispatch, SetStateAction } from "react";
 
 interface NavProps {
-  isCollapsed: boolean
+  isCollapsed: boolean,
+  setCurrentPage: Dispatch<SetStateAction<string>>,
   links: {
     title: string
     label?: string
@@ -21,7 +23,7 @@ interface NavProps {
   }[]
 }
 
-export function Nav({ links, isCollapsed }: NavProps) {
+export function Nav({ links, isCollapsed, setCurrentPage }: NavProps) {
   return (
     <div
       data-collapsed={isCollapsed}
@@ -57,6 +59,7 @@ export function Nav({ links, isCollapsed }: NavProps) {
           ) : (
             <Link
               key={index}
+              onClick={() => { setCurrentPage(link.title) }}
               href={link.title.toLocaleLowerCase()}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
