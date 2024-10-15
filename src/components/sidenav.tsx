@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils"
 import {
-  LogOut,
-  Settings,
+  // LogOut,
+  // Settings,
   DoorOpen,
   FolderKanban,
   ContactRound,
   FileText,
   Package,
-  CircleUserRound,
-  BrainCircuit,
+  // CircleUserRound,
+  // BrainCircuit,
   LayoutDashboard,
   Users,
 } from "lucide-react"
@@ -140,8 +140,9 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                 },
               ]}
             />
-            <div className="mt-auto">
-              <Nav
+            <div className="mt-auto p-4">
+              <div className={cn("bg-muted h-52", isCollapsed && "hidden")} />
+              {/* <Nav
                 isCollapsed={isCollapsed}
                 links={[
                   {
@@ -170,7 +171,7 @@ export default function SideNav({ children }: { children: React.ReactNode }) {
                   },
 
                 ]}
-              />
+              /> */}
             </div>
           </div>
         </ResizablePanel>
