@@ -1,13 +1,7 @@
+import { Suspense } from 'react'
 
-
-// import SignOutButton from "@/components/signout"
-import DrawerDemo from "@/components/drawer"
-
-export default function Dashboard() {
+export default function page() {
   return (
-    <div className="p-5">
-      test
-      <DrawerDemo />
-    </div>
+    <Suspense fallback={<p>Loading ...</p>}>Dashboard</Suspense>
   )
 }
